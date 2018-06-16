@@ -1,7 +1,7 @@
 const gridCellSize = 35;
 const gridWidth = 30;
 const gridHeight = 25;
-const routeBorderRadiusRatio = 0.8;
+const routeBorderRadiusRatio = 0.7;
 
 const levelRouteMap = [
   [0, 8],
@@ -10,8 +10,10 @@ const levelRouteMap = [
   [20, 5],
   [20, 15],
   [15, 15],
-  [15, 20],
-  [gridWidth - 1, 20],
+  [15, 10],
+  [10, 10],
+  [10, 20],
+  [gridWidth, 20],
 ];
 
 function run(canvas) {
@@ -107,9 +109,51 @@ function run(canvas) {
         aEnd = 0;
         aAntiClockWise = true;
       }
-
+      // elbow up-right
+      else if (diffY < 0 && nextDiffX > 0) {
+        dX = -routeBorderRadiusRatio;
+        dY = 1 - 2 * routeBorderRadiusRatio;
+        aX = 1 - 2 * routeBorderRadiusRatio;
+        aY = 1 - 2 * routeBorderRadiusRatio;
+        aStart = -Math.PI;
+        aEnd = -Math.PI / 2;
+        aAntiClockWise = false;
+      }
+      // elbow right-down
+      else if (diffX > 0 && nextDiffY > 0) {
+        dX = 2 * routeBorderRadiusRatio - 1;
+        dY = -routeBorderRadiusRatio;
+        aX = 2 * routeBorderRadiusRatio - 1;
+        aY = 1 - 2 * routeBorderRadiusRatio;
+        aStart = -Math.PI / 2;
+        aEnd = 0;
+        aAntiClockWise = false;
+      }
+      // elbow down-left
+      else if (diffY > 0 && nextDiffX < 0) {
+        dX = routeBorderRadiusRatio;
+        dY = 2 * routeBorderRadiusRatio - 1;
+        aX = 2 * routeBorderRadiusRatio - 1;
+        aY = 2 * routeBorderRadiusRatio - 1;
+        aStart = 0;
+        aEnd = Math.PI / 2;
+        aAntiClockWise = false;
+      }
+      // elbow left-up
+      else if (diffX < 0 && nextDiffY < 0) {
+        dX = 1 - 2 * routeBorderRadiusRatio;
+        dY = routeBorderRadiusRatio;  
+        aX = 1 - 2 * routeBorderRadiusRatio;
+        aY = 2 * routeBorderRadiusRatio - 1;
+        aStart = Math.PI / 2;
+        aEnd = Math.PI;
+        aAntiClockWise = false;
+      }
       _.lineTo((point[0] + dX) * gridCellSize, (point[1] + dY) * gridCellSize);
       _.arc((point[0] + aX) * gridCellSize, (point[1] + aY) * gridCellSize, (1 - routeBorderRadiusRatio) * gridCellSize, aStart, aEnd, aAntiClockWise);
+
+      diffX = nextDiffX;
+      diffY = nextDiffY;
     }
     _.stroke();
   }
