@@ -93,11 +93,11 @@ function run(canvas) {
     };
   });
 
-  canvas.addEventListener('mouseenter', e => {
+  canvas.addEventListener('mouseenter', () => {
     state.isCanvasHovered = true;
   });
 
-  canvas.addEventListener('mouseleave', e => {
+  canvas.addEventListener('mouseleave', () => {
     state.isCanvasHovered = false;
   });
 
@@ -113,14 +113,14 @@ function run(canvas) {
       _.beginPath();
       _.moveTo(i, 0);
       _.lineTo(i, state.height);
-      _.stroke()
+      _.stroke();
     }
 
     for (let j = 0; j < state.height + 1; j += state.gridCellSize) {
       _.beginPath();
       _.moveTo(0, j);
       _.lineTo(state.width, j);
-      _.stroke()
+      _.stroke();
     }
 
     /* Route */
