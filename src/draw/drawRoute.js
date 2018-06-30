@@ -1,24 +1,30 @@
-import constants from './constants';
-
-function drawRoute(_, levelRouteMap) {
+function drawRoute(_, state) {
   /* Route */
 
-  const routeBorderRadiusRatio = 0.7;
+  const { levelRouteMap, levelRouteMapTiles, gridCellSize } = state;
+  // const routeBorderRadiusRatio = 0.7;
+
+  _.fillStyle = 'LightGrey';
+
+  levelRouteMapTiles.forEach(tile => {
+    _.fillRect(tile[0] * gridCellSize, tile[1] * gridCellSize, gridCellSize, gridCellSize);
+  });
 
   _.strokeStyle = 'LightBlue';
-  _.lineWidth = constants.gridCellSize;
+  _.lineWidth = 10;
 
   _.beginPath();
-  _.moveTo(levelRouteMap[0][0] * constants.gridCellSize, levelRouteMap[0][1] * constants.gridCellSize);
+  _.moveTo(levelRouteMap[0][0] * gridCellSize, levelRouteMap[0][1] * gridCellSize);
 
   for (let i = 1; i < levelRouteMap.length; i++) {
     const point = levelRouteMap[i];
 
-    _.lineTo(point[0] * constants.gridCellSize, point[1] * constants.gridCellSize);
+    _.lineTo(point[0] * gridCellSize, point[1] * gridCellSize);
   }
 
   _.stroke();
 
+  /*
   _.strokeStyle = 'red';
   _.lineWidth = 3;
 
@@ -29,7 +35,7 @@ function drawRoute(_, levelRouteMap) {
   let dY = diffX ? -routeBorderRadiusRatio : 0;
 
   _.beginPath();
-  _.moveTo((levelRouteMap[0][0] + dX) * constants.gridCellSize, (levelRouteMap[0][1] + dY) * constants.gridCellSize);
+  _.moveTo((levelRouteMap[0][0] + dX) * gridCellSize, (levelRouteMap[0][1] + dY) * gridCellSize);
 
   let nextDiffX, nextDiffY, aX, aY, aStart, aEnd, aAntiClockWise;
 
@@ -121,14 +127,15 @@ function drawRoute(_, levelRouteMap) {
       aAntiClockWise = true;
     }
 
-    _.lineTo((point[0] + dX) * constants.gridCellSize, (point[1] + dY) * constants.gridCellSize);
-    _.arc((point[0] + aX) * constants.gridCellSize, (point[1] + aY) * constants.gridCellSize, (1 - routeBorderRadiusRatio) * constants.gridCellSize, aStart, aEnd, aAntiClockWise);
+    _.lineTo((point[0] + dX) * gridCellSize, (point[1] + dY) * gridCellSize);
+    _.arc((point[0] + aX) * gridCellSize, (point[1] + aY) * gridCellSize, (1 - routeBorderRadiusRatio) * gridCellSize, aStart, aEnd, aAntiClockWise);
 
     diffX = nextDiffX;
     diffY = nextDiffY;
   }
 
   _.stroke();
+  */
 }
 
 export default drawRoute;

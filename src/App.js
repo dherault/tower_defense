@@ -41,10 +41,14 @@ class App extends Component {
   }
 
   render() {
+    const { activePlaceableTower } = this.state;
     return (
       <div className="App">
         <div className="towers">
-          <div className="tower" onClick={() => this.handleTowerClick(1)}>
+          <div
+            onClick={() => this.handleTowerClick(1)}
+            className={activePlaceableTower === 1 ? 'tower tower-active' : 'tower'}
+          >
             Tower 1
           </div>
         </div>
