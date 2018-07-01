@@ -10,6 +10,8 @@ function drawPlaceableTower(_, state) {
     && mousePos.y <= (tile[1] + 1) * state.gridCellSize + 20
   ));
 
+  state.activePlaceableTowerIsPlaceable = !whithinForbidenTile;
+
   _.fillStyle = whithinForbidenTile ? 'Red' : 'Grey';
   _.beginPath();
   _.arc(mousePos.x, mousePos.y, 20, 0, 2 * Math.PI);

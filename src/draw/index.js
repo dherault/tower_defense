@@ -1,4 +1,5 @@
 import drawRoute from './drawRoute';
+import drawTowers from './drawTowers';
 import drawPlaceableTower from './drawPlaceableTower';
 import drawBalloons from './drawBalloons';
 
@@ -21,6 +22,7 @@ const state = {
     [10, 20],
   ],
   balloons: [],
+  towers: [],
 };
 
 state.levelRouteMap.push([state.gridWidth, 20]);
@@ -124,6 +126,19 @@ function run(canvas) {
     state.isCanvasHovered = false;
   });
 
+  canvas.addEventListener('click', () => {
+    if (state.activePlaceableTower && state.activePlaceableTowerIsPlaceable) {
+      state.towers.push({
+        type: state.activePlaceableTower,
+        x: state.mousePos.x,
+        y: state.mousePos.y,
+      });
+
+      state.activePlaceableTower = 0;
+      state.activePlaceableTowerIsPlaceable = false;
+    }
+  });
+
   function draw() {
     _.clearRect(0, 0, state.width, state.height);
 
@@ -154,9 +169,14 @@ function run(canvas) {
 
     drawPlaceableTower(_, state);
 
+    /* Towers */
+
+    drawTowers(_, state);
+
     /* Balloons */
 
     drawBalloons(_, state);
+
   }
 
   function iterate() {
