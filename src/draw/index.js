@@ -20,12 +20,7 @@ const state = {
     [10, 10],
     [10, 20],
   ],
-  balloons: [
-    {
-      strength: 1,
-      progress: 0,
-    },
-  ],
+  balloons: [],
 };
 
 state.levelRouteMap.push([state.gridWidth, 20]);
@@ -72,10 +67,38 @@ state.levelRouteMapTiles = levelRouteMapTiles;
 
 /* levelRouteMapProgress */
 
+let levelRouteMapProgress = 0;
+
 for (let i = 1; i < state.levelRouteMap.length; i++) {
   const tile = state.levelRouteMap[i];
   const previousTile = state.levelRouteMap[i - 1];
 
+  const absDiffX = Math.abs(tile[0] - previousTile[0]) * state.gridCellSize;
+  const absDiffY = Math.abs(tile[1] - previousTile[1]) * state.gridCellSize;
+
+  levelRouteMapProgress += absDiffX + absDiffY;
+}
+
+state.levelRouteMapProgress = levelRouteMapProgress;
+
+/* Balloons generation */
+
+let iteration = -1;
+const frequency = 100;
+let currentBalloons = 0;
+const maxBalloons = 10;
+
+function generateBalloons() {
+  iteration++;
+
+  if (iteration % frequency || currentBalloons >= maxBalloons) return;
+
+  currentBalloons++;
+
+  state.balloons.push({
+    progress: 0,
+    strength: 1,
+  });
 }
 
 /* Run */
@@ -137,8 +160,20 @@ function run(canvas) {
   }
 
   function iterate() {
-    state.balloons.forEach(balloon => {
+    generateBalloons();
+
+    const balloonsToDelete = [];
+
+    state.balloons.forEach((balloon, i) => {
       balloon.progress += 1;
+
+      if (balloon.progress >= state.levelRouteMapProgress) {
+        balloonsToDelete.unshift(i);
+      }
+    });
+
+    balloonsToDelete.forEach(balloonIndex => {
+      state.balloons.splice(balloonIndex, 1);
     });
 
     draw();
