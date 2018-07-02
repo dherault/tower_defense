@@ -2,8 +2,12 @@ import drawRoute from './drawRoute';
 import drawTowers from './drawTowers';
 import drawPlaceableTower from './drawPlaceableTower';
 import drawBalloons from './drawBalloons';
+import placeTower from '../events/placeTower';
+
+/* State */
 
 const state = {
+  iteration: 0,
   mousePos: { x: 0, y: 0 },
   isCanvasHovered: false,
   gridCellSize: 35,
@@ -23,9 +27,15 @@ const state = {
   ],
   balloons: [],
   towers: [],
+  pikes: [],
 };
 
 state.levelRouteMap.push([state.gridWidth, 20]);
+
+state.firstPosition = {
+  x: state.levelRouteMap[0][0] * state.gridCellSize,
+  y: state.levelRouteMap[0][1] * state.gridCellSize,
+};
 
 /* levelRouteMapTiles */
 
@@ -85,21 +95,19 @@ state.levelRouteMapProgress = levelRouteMapProgress;
 
 /* Balloons generation */
 
-let iteration = -1;
-const frequency = 100;
 let currentBalloons = 0;
 const maxBalloons = 10;
+const frequency = 100;
 
-function generateBalloons() {
-  iteration++;
-
-  if (iteration % frequency || currentBalloons >= maxBalloons) return;
+function generateBalloons(state) {
+  if (currentBalloons >= maxBalloons || state.iteration % frequency) return;
 
   currentBalloons++;
 
   state.balloons.push({
     progress: 0,
     strength: 1,
+    position: state.firstPosition,
   });
 }
 
@@ -127,16 +135,7 @@ function run(canvas) {
   });
 
   canvas.addEventListener('click', () => {
-    if (state.activePlaceableTower && state.activePlaceableTowerIsPlaceable) {
-      state.towers.push({
-        type: state.activePlaceableTower,
-        x: state.mousePos.x,
-        y: state.mousePos.y,
-      });
-
-      state.activePlaceableTower = 0;
-      state.activePlaceableTowerIsPlaceable = false;
-    }
+    placeTower(state);
   });
 
   function draw() {
@@ -180,7 +179,11 @@ function run(canvas) {
   }
 
   function iterate() {
-    generateBalloons();
+    generateBalloons(state);
+
+    state.towers.forEach(tower => tower.launchPikes(state));
+
+    console.log(state.pikes);
 
     const balloonsToDelete = [];
 
@@ -197,6 +200,10 @@ function run(canvas) {
     });
 
     draw();
+
+    state.iteration++;
+
+    if (state.iteration === 100000) state.iteration = 0;
   }
 
   draw();

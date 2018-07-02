@@ -1,11 +1,11 @@
 function drawBalloons(_, state) {
 
   state.balloons.forEach(balloon => {
-    const position = balloonsProgressToPosition(balloon.progress, state);
+    balloon.position = balloonsProgressToPosition(balloon.progress, state);
 
     _.fillStyle = 'Red';
     _.beginPath();
-    _.arc(position.x, position.y, 20, 0, 2 * Math.PI);
+    _.arc(balloon.position.x, balloon.position.y, 20, 0, 2 * Math.PI);
     _.closePath();
     _.fill();
   });
