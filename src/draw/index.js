@@ -2,7 +2,9 @@ import drawRoute from './drawRoute';
 import drawTowers from './drawTowers';
 import drawPlaceableTower from './drawPlaceableTower';
 import drawBalloons from './drawBalloons';
+import drawPikes from './drawPikes';
 import placeTower from '../events/placeTower';
+import { distance } from '../utils/math';
 
 /* State */
 
@@ -14,6 +16,17 @@ const state = {
   gridWidth: 30,
   gridHeight: 25,
   activePlaceableTower: 0,
+  balloons: [],
+  towers: [],
+  pikes: [],
+  towerTypeToConfiguration: {
+    1: {
+      pikeFrequency: 50, // How often does a pike
+      pikeSpeed: 2.2,
+      pikeMaxDistance: 200,
+      pikeStrength: 1,
+    },
+  },
   levelRouteMap: [
     [0, 8],
     [10, 8],
@@ -25,9 +38,6 @@ const state = {
     [10, 10],
     [10, 20],
   ],
-  balloons: [],
-  towers: [],
-  pikes: [],
 };
 
 state.levelRouteMap.push([state.gridWidth, 20]);
@@ -176,15 +186,37 @@ function run(canvas) {
 
     drawBalloons(_, state);
 
+    /* Pikes */
+
+    drawPikes(_, state);
   }
 
   function iterate() {
+    // Generate balloons
     generateBalloons(state);
 
+    // Launch pikes
     state.towers.forEach(tower => tower.launchPikes(state));
 
-    console.log(state.pikes);
+    // Advance and recycle pikes
+    const pikesToDelete = [];
 
+    state.pikes.forEach((pike, i) => {
+      const towerConfiguration = state.towerTypeToConfiguration[pike.tower.type];
+
+      pike.position.x += pike.direction.x * towerConfiguration.pikeSpeed;
+      pike.position.y += pike.direction.y * towerConfiguration.pikeSpeed;
+
+      if (distance(pike.position, pike.tower.position) >= towerConfiguration.pikeMaxDistance) {
+        pikesToDelete.unshift(i);
+      }
+    });
+
+    pikesToDelete.forEach(pikeIndex => {
+      state.pikes.splice(pikeIndex, 1);
+    });
+
+    // Advance and recycle balloons
     const balloonsToDelete = [];
 
     state.balloons.forEach((balloon, i) => {
@@ -211,8 +243,9 @@ function run(canvas) {
   setInterval(iterate, 1000 / frameRate);
 }
 
-function setActivePlaceableTower(n) {
+function setActivePlaceableTower(n, fn) {
   state.activePlaceableTower = n;
+  state.activePlaceableTowerEndFn = fn;
 }
 
 export { run, setActivePlaceableTower };

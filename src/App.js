@@ -28,17 +28,17 @@ class App extends Component {
     else {
       this.setState({ activePlaceableTower: n });
 
-      setActivePlaceableTower(n);
+      setActivePlaceableTower(n, () => this.setState({ activePlaceableTower: 0 }));
     }
   }
 
-  handleCanvasClick = () => {
-    const { activePlaceableTower } = this.state;
-
-    if (activePlaceableTower) {
-      this.setState({ activePlaceableTower: 0 });
-    }
-  }
+  // handleCanvasClick = () => {
+  //   const { activePlaceableTower } = this.state;
+  //
+  //   if (activePlaceableTower) {
+  //     this.setState({ activePlaceableTower: 0 });
+  //   }
+  // }
 
   render() {
     const { activePlaceableTower } = this.state;

@@ -2,8 +2,10 @@ function placeTower(state) {
   if (state.activePlaceableTower && state.activePlaceableTowerIsPlaceable) {
     const tower = {
       type: state.activePlaceableTower,
-      x: state.mousePos.x,
-      y: state.mousePos.y,
+      position: {
+        x: state.mousePos.x,
+        y: state.mousePos.y,
+      },
     };
 
     tower.launchPikes = launchPikesFactory(tower);
@@ -12,24 +14,30 @@ function placeTower(state) {
 
     state.activePlaceableTower = 0;
     state.activePlaceableTowerIsPlaceable = false;
+
+    if (typeof state.activePlaceableTowerEndFn === 'function') {
+      state.activePlaceableTowerEndFn();
+    }
   }
 }
 
 function launchPikesFactory(tower) {
-
+  
   return function launchPikes(state) {
-    if (state.iteration % 50) return;
+    const towerConfiguration = state.towerTypeToConfiguration[tower.type];
+
+    if (state.iteration % towerConfiguration.pikeFrequency) return;
 
     let dx;
     let dy;
 
-    for (let i = state.balloons.length - 1; i >= 0; i--) {
+    for (let i = 0; i < state.balloons.length; i++) {
       const balloon = state.balloons[i];
-      const a = tower.x - balloon.position.x;
-      const b = tower.y - balloon.position.y;
+      const a = balloon.position.x - tower.position.x;
+      const b = balloon.position.y - tower.position.y;
       const balloonDistance = Math.sqrt(a * a + b * b);
 
-      if (balloonDistance < 200) {
+      if (balloonDistance < towerConfiguration.pikeMaxDistance) {
         dx = a / balloonDistance;
         dy = b / balloonDistance;
 
@@ -41,9 +49,10 @@ function launchPikesFactory(tower) {
 
     state.pikes.push({
       tower,
-      progress: 0,
-      // maxProgress: 200,
-      // speed:
+      position: {
+        x: tower.position.x,
+        y: tower.position.y,
+      },
       direction: {
         x: dx,
         y: dy,
