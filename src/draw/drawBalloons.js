@@ -5,7 +5,7 @@ function drawBalloons(_, state) {
 
     _.fillStyle = 'Red';
     _.beginPath();
-    _.arc(balloon.position.x, balloon.position.y, 20, 0, 2 * Math.PI);
+    _.arc(balloon.position.x, balloon.position.y, state.balloonSize, 0, 2 * Math.PI);
     _.closePath();
     _.fill();
   });

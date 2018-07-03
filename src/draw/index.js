@@ -15,6 +15,7 @@ const state = {
   gridCellSize: 35,
   gridWidth: 30,
   gridHeight: 25,
+  balloonSize: 20,
   activePlaceableTower: 0,
   balloons: [],
   towers: [],
@@ -212,11 +213,8 @@ function run(canvas) {
       }
     });
 
-    pikesToDelete.forEach(pikeIndex => {
-      state.pikes.splice(pikeIndex, 1);
-    });
-
     // Advance and recycle balloons
+    // Explode balloons
     const balloonsToDelete = [];
 
     state.balloons.forEach((balloon, i) => {
@@ -225,10 +223,22 @@ function run(canvas) {
       if (balloon.progress >= state.levelRouteMapProgress) {
         balloonsToDelete.unshift(i);
       }
+
+      for (let k = 0; k < state.pikes.length; k++) {
+        if (distance(state.pikes[k].position, balloon.position) < state.balloonSize) {
+          balloonsToDelete.unshift(i);
+          pikesToDelete.push(k);
+          break;
+        }
+      }
     });
 
     balloonsToDelete.forEach(balloonIndex => {
       state.balloons.splice(balloonIndex, 1);
+    });
+
+    pikesToDelete.sort().reverse().forEach(pikeIndex => {
+      state.pikes.splice(pikeIndex, 1);
     });
 
     draw();
