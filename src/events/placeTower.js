@@ -22,11 +22,11 @@ function placeTower(state) {
 }
 
 function launchPikesFactory(tower) {
-  
+
   return function launchPikes(state) {
     const towerConfiguration = state.towerTypeToConfiguration[tower.type];
 
-    if (state.iteration % towerConfiguration.pikeFrequency) return;
+    if (!state.balloons.length || state.iteration % towerConfiguration.pikeFrequency) return;
 
     let dx;
     let dy;

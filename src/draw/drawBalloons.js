@@ -1,9 +1,11 @@
+const balloonStrengthToColor = ['', 'Red', 'Blue', 'Green'];
+
 function drawBalloons(_, state) {
 
   state.balloons.forEach(balloon => {
     balloon.position = balloonsProgressToPosition(balloon.progress, state);
 
-    _.fillStyle = 'Red';
+    _.fillStyle = balloonStrengthToColor[balloon.strength];
     _.beginPath();
     _.arc(balloon.position.x, balloon.position.y, state.balloonSize, 0, 2 * Math.PI);
     _.closePath();

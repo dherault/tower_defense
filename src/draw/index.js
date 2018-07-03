@@ -22,7 +22,7 @@ const state = {
   pikes: [],
   towerTypeToConfiguration: {
     1: {
-      pikeFrequency: 50, // How often does a pike
+      pikeFrequency: 50, // How often does a pike appear
       pikeSpeed: 2.2,
       pikeMaxDistance: 200,
       pikeStrength: 1,
@@ -117,7 +117,7 @@ function generateBalloons(state) {
 
   state.balloons.push({
     progress: 0,
-    strength: 1,
+    strength: 3,
     position: state.firstPosition,
   });
 }
@@ -209,7 +209,7 @@ function run(canvas) {
       pike.position.y += pike.direction.y * towerConfiguration.pikeSpeed;
 
       if (distance(pike.position, pike.tower.position) >= towerConfiguration.pikeMaxDistance) {
-        pikesToDelete.unshift(i);
+        pikesToDelete.push(i);
       }
     });
 
@@ -225,10 +225,16 @@ function run(canvas) {
       }
 
       for (let k = 0; k < state.pikes.length; k++) {
-        if (distance(state.pikes[k].position, balloon.position) < state.balloonSize) {
-          balloonsToDelete.unshift(i);
+        const pike = state.pikes[k];
+
+        if (distance(pike.position, balloon.position) < state.balloonSize) {
+          balloon.strength -= state.towerTypeToConfiguration[pike.tower.type].pikeStrength;
           pikesToDelete.push(k);
-          break;
+
+          if (balloon.strength <= 0) {
+            balloonsToDelete.unshift(i);
+            break;
+          }
         }
       }
     });
