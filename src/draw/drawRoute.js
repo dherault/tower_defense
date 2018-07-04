@@ -1,10 +1,10 @@
 function drawRoute(_, state) {
   /* Route */
 
-  const { levelRouteMap, levelRouteMapTiles, gridCellSize } = state;
+  const { levelRouteMap, gridCellSize } = state;
   // const routeBorderRadiusRatio = 0.7;
 
-  _.fillStyle = '#68b249';
+  _.fillStyle = '#8ce866';
 
   _.fillRect(0, 0, state.width, state.height);
   // levelRouteMapTiles.forEach(tile => {

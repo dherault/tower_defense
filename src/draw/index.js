@@ -22,6 +22,8 @@ const state = {
   pikes: [],
   towerTypeToConfiguration: {
     1: {
+      towerSize: 25,
+      towerColor: 'DarkGrey',
       pikeFrequency: 50, // How often does a pike appear
       pikeSpeed: 2.2,
       pikeMaxDistance: 200,

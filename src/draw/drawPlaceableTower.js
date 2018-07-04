@@ -12,15 +12,17 @@ function drawPlaceableTower(_, state) {
 
   state.activePlaceableTowerIsPlaceable = !whithinForbidenTile;
 
-  _.fillStyle = _.strokeStyle = whithinForbidenTile ? 'Red' : 'Grey';
+  const configuration = state.towerTypeToConfiguration[state.activePlaceableTower];
+
+  _.fillStyle = _.strokeStyle = whithinForbidenTile ? 'Red' : configuration.towerColor;
   _.beginPath();
-  _.arc(mousePos.x, mousePos.y, 20, 0, 2 * Math.PI);
+  _.arc(mousePos.x, mousePos.y, configuration.towerSize, 0, 2 * Math.PI);
   _.closePath();
   _.fill();
 
   _.lineWidth = 1;
   _.beginPath();
-  _.arc(mousePos.x, mousePos.y, 200, 0, 2 * Math.PI);
+  _.arc(mousePos.x, mousePos.y, configuration.pikeMaxDistance, 0, 2 * Math.PI);
   _.closePath();
   _.stroke();
 }
