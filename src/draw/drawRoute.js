@@ -4,14 +4,15 @@ function drawRoute(_, state) {
   const { levelRouteMap, levelRouteMapTiles, gridCellSize } = state;
   // const routeBorderRadiusRatio = 0.7;
 
-  _.fillStyle = 'LightGrey';
+  _.fillStyle = '#68b249';
 
-  levelRouteMapTiles.forEach(tile => {
-    _.fillRect(tile[0] * gridCellSize, tile[1] * gridCellSize, gridCellSize, gridCellSize);
-  });
+  _.fillRect(0, 0, state.width, state.height);
+  // levelRouteMapTiles.forEach(tile => {
+  //   _.fillRect(tile[0] * gridCellSize, tile[1] * gridCellSize, gridCellSize, gridCellSize);
+  // });
 
-  _.strokeStyle = 'LightBlue';
-  _.lineWidth = 10;
+  _.strokeStyle = '#f2b252';
+  _.lineWidth = state.gridCellSize * 2;
 
   _.beginPath();
   _.moveTo(levelRouteMap[0][0] * gridCellSize, levelRouteMap[0][1] * gridCellSize);

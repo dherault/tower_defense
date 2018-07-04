@@ -12,7 +12,7 @@ const state = {
   iteration: 0,
   mousePos: { x: 0, y: 0 },
   isCanvasHovered: false,
-  gridCellSize: 35,
+  gridCellSize: 30,
   gridWidth: 30,
   gridHeight: 25,
   balloonSize: 20,
@@ -35,8 +35,8 @@ const state = {
     [20, 5],
     [20, 15],
     [15, 15],
-    [15, 10],
-    [10, 10],
+    [15, 12],
+    [10, 12],
     [10, 20],
   ],
 };
@@ -154,22 +154,22 @@ function run(canvas) {
 
     /* Grid */
 
-    _.strokeStyle = 'LightGrey';
-    _.lineWidth = 1;
-
-    for (let i = 0; i < state.width + 1; i += state.gridCellSize) {
-      _.beginPath();
-      _.moveTo(i, 0);
-      _.lineTo(i, state.height);
-      _.stroke();
-    }
-
-    for (let j = 0; j < state.height + 1; j += state.gridCellSize) {
-      _.beginPath();
-      _.moveTo(0, j);
-      _.lineTo(state.width, j);
-      _.stroke();
-    }
+    // _.strokeStyle = 'LightGrey';
+    // _.lineWidth = 1;
+    //
+    // for (let i = 0; i < state.width + 1; i += state.gridCellSize) {
+    //   _.beginPath();
+    //   _.moveTo(i, 0);
+    //   _.lineTo(i, state.height);
+    //   _.stroke();
+    // }
+    //
+    // for (let j = 0; j < state.height + 1; j += state.gridCellSize) {
+    //   _.beginPath();
+    //   _.moveTo(0, j);
+    //   _.lineTo(state.width, j);
+    //   _.stroke();
+    // }
 
     /* Route */
 
