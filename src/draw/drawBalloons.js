@@ -1,4 +1,4 @@
-const balloonStrengthToColor = ['', 'Red', 'Blue', 'Green'];
+const balloonStrengthToColor = ['', 'Red', 'Blue', 'Yellow'];
 
 function drawBalloons(_, state) {
 
