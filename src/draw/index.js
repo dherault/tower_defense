@@ -1,3 +1,4 @@
+import drawCommands from './drawCommands';
 import drawRoute from './drawRoute';
 import drawTowers from './drawTowers';
 import drawPlaceableTower from './drawPlaceableTower';
@@ -8,13 +9,15 @@ import { distance } from '../utils/math';
 
 /* State */
 
+const gridWidth = 35;
 const state = {
   iteration: 0,
   mousePos: { x: 0, y: 0 },
   isCanvasHovered: false,
   gridCellSize: 30,
-  gridWidth: 35,
+  gridWidth,
   gridHeight: 30,
+  commandsSize: 180,
   balloonSize: 20,
   activePlaceableTower: 0,
   balloons: [],
@@ -31,19 +34,19 @@ const state = {
     },
   },
   levelRouteMap: [
-    [0, 10],
-    [10, 10],
-    [10, 6],
-    [25, 6],
-    [25, 18],
-    [17, 18],
+    [0, 7],
+    [10, 7],
+    [10, 3],
+    [25, 3],
+    [25, 15],
     [17, 15],
-    [10, 15],
-    [10, 23],
+    [17, 12],
+    [10, 12],
+    [10, 20],
+    [gridWidth, 20],
   ],
+  backgroundColor: '#8ce866',
 };
-
-state.levelRouteMap.push([state.gridWidth, 23]);
 
 state.firstPosition = {
   x: state.levelRouteMap[0][0] * state.gridCellSize,
@@ -154,6 +157,10 @@ function run(canvas) {
   function draw() {
     _.clearRect(0, 0, state.width, state.height);
 
+    /* Commands */
+
+    drawCommands(_, state);
+
     /* Route */
 
     drawRoute(_, state);
@@ -205,6 +212,7 @@ function run(canvas) {
 
       if (balloon.progress >= state.levelRouteMapProgress) {
         balloonsToDelete.unshift(i);
+        state.out += 1;
       }
 
       for (let k = 0; k < state.pikes.length; k++) {

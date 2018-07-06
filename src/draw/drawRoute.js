@@ -4,9 +4,9 @@ function drawRoute(_, state) {
   const { levelRouteMap, gridCellSize } = state;
   // const routeBorderRadiusRatio = 0.7;
 
-  _.fillStyle = '#8ce866';
+  _.fillStyle = state.backgroundColor;
 
-  _.fillRect(0, 0, state.width, state.height);
+  _.fillRect(0, 0, state.width, state.height - state.commandsSize);
   // levelRouteMapTiles.forEach(tile => {
   //   _.fillRect(tile[0] * gridCellSize, tile[1] * gridCellSize, gridCellSize, gridCellSize);
   // });
