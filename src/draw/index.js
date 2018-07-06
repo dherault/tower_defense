@@ -13,8 +13,8 @@ const state = {
   mousePos: { x: 0, y: 0 },
   isCanvasHovered: false,
   gridCellSize: 30,
-  gridWidth: 30,
-  gridHeight: 25,
+  gridWidth: 35,
+  gridHeight: 30,
   balloonSize: 20,
   activePlaceableTower: 0,
   balloons: [],
@@ -31,19 +31,19 @@ const state = {
     },
   },
   levelRouteMap: [
-    [0, 8],
-    [10, 8],
-    [10, 5],
-    [20, 5],
-    [20, 15],
-    [15, 15],
-    [15, 12],
-    [10, 12],
-    [10, 20],
+    [0, 10],
+    [10, 10],
+    [10, 6],
+    [25, 6],
+    [25, 18],
+    [17, 18],
+    [17, 15],
+    [10, 15],
+    [10, 23],
   ],
 };
 
-state.levelRouteMap.push([state.gridWidth, 20]);
+state.levelRouteMap.push([state.gridWidth, 23]);
 
 state.firstPosition = {
   x: state.levelRouteMap[0][0] * state.gridCellSize,
@@ -153,25 +153,6 @@ function run(canvas) {
 
   function draw() {
     _.clearRect(0, 0, state.width, state.height);
-
-    /* Grid */
-
-    // _.strokeStyle = 'LightGrey';
-    // _.lineWidth = 1;
-    //
-    // for (let i = 0; i < state.width + 1; i += state.gridCellSize) {
-    //   _.beginPath();
-    //   _.moveTo(i, 0);
-    //   _.lineTo(i, state.height);
-    //   _.stroke();
-    // }
-    //
-    // for (let j = 0; j < state.height + 1; j += state.gridCellSize) {
-    //   _.beginPath();
-    //   _.moveTo(0, j);
-    //   _.lineTo(state.width, j);
-    //   _.stroke();
-    // }
 
     /* Route */
 
