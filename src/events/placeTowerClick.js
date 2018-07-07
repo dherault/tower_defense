@@ -1,4 +1,5 @@
-function placeTower(state) {
+// Creates a new tower
+function placeTowerClick(state) {
   if (state.activePlaceableTower && state.activePlaceableTowerIsPlaceable) {
     const tower = {
       type: state.activePlaceableTower,
@@ -14,10 +15,6 @@ function placeTower(state) {
 
     state.activePlaceableTower = 0;
     state.activePlaceableTowerIsPlaceable = false;
-
-    if (typeof state.activePlaceableTowerEndFn === 'function') {
-      state.activePlaceableTowerEndFn();
-    }
   }
 }
 
@@ -61,4 +58,4 @@ function launchPikesFactory(tower) {
   };
 }
 
-export default placeTower;
+export default placeTowerClick;

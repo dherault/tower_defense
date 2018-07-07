@@ -4,25 +4,38 @@ import drawTowers from './drawTowers';
 import drawPlaceableTower from './drawPlaceableTower';
 import drawBalloons from './drawBalloons';
 import drawPikes from './drawPikes';
-import placeTower from '../events/placeTower';
+import placeTowerClick from '../events/placeTowerClick';
+import towerButtonClick from '../events/towerButtonClick';
 import { distance } from '../utils/math';
 
 /* State */
 
+const gridCellSize = 30;
 const gridWidth = 35;
+const gridHeight = 30;
+const commandsSize = 180;
+const commandsHeight = gridHeight * gridCellSize - commandsSize;
 const state = {
+  // Main
   iteration: 0,
+  score: 0,
+  outBalloonsCount: 0,
+  // Events
   mousePos: { x: 0, y: 0 },
   isCanvasHovered: false,
-  gridCellSize: 30,
-  gridWidth,
-  gridHeight: 30,
-  commandsSize: 180,
-  balloonSize: 20,
   activePlaceableTower: 0,
+  // Dimensions
+  gridCellSize,
+  gridWidth,
+  gridHeight,
+  commandsSize,
+  commandsHeight,
+  balloonSize: 20,
+  // Items
   balloons: [],
   towers: [],
   pikes: [],
+  // Config
   towerTypeToConfiguration: {
     1: {
       towerSize: 25,
@@ -31,6 +44,15 @@ const state = {
       pikeSpeed: 2.2,
       pikeMaxDistance: 200,
       pikeStrength: 1,
+      button: {
+        x: 30,
+        y: commandsHeight + 30,
+        width: 120,
+        height: 120,
+        text: 'Shooter',
+        textX: 48,
+        textY: commandsHeight + 95,
+      },
     },
   },
   levelRouteMap: [
@@ -135,6 +157,8 @@ function run(canvas) {
   canvas.width = state.width = state.gridWidth * state.gridCellSize;
   canvas.height = state.height = state.gridHeight * state.gridCellSize;
 
+  /* Events */
+
   canvas.addEventListener('mousemove', e => {
     state.mousePos = {
       x: e.layerX,
@@ -151,8 +175,14 @@ function run(canvas) {
   });
 
   canvas.addEventListener('click', () => {
-    placeTower(state);
+    placeTowerClick(state);
+
+    Object.keys(state.towerTypeToConfiguration).forEach(key => {
+      towerButtonClick(state, key);
+    });
   });
+
+  /* Draw */
 
   function draw() {
     _.clearRect(0, 0, state.width, state.height);
@@ -212,7 +242,8 @@ function run(canvas) {
 
       if (balloon.progress >= state.levelRouteMapProgress) {
         balloonsToDelete.unshift(i);
-        state.out += 1;
+        state.outBalloonsCount += 1;
+        state.score -= balloon.strength * 15;
       }
 
       for (let k = 0; k < state.pikes.length; k++) {
@@ -221,6 +252,7 @@ function run(canvas) {
         if (distance(pike.position, balloon.position) < state.balloonSize) {
           balloon.strength -= state.towerTypeToConfiguration[pike.tower.type].pikeStrength;
           pikesToDelete.push(k);
+          state.score += 10;
 
           if (balloon.strength <= 0) {
             balloonsToDelete.unshift(i);
@@ -250,9 +282,4 @@ function run(canvas) {
   setInterval(iterate, 1000 / frameRate);
 }
 
-function setActivePlaceableTower(n, fn) {
-  state.activePlaceableTower = n;
-  state.activePlaceableTowerEndFn = fn;
-}
-
-export { run, setActivePlaceableTower };
+export default run;
